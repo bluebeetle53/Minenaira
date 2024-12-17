@@ -183,8 +183,7 @@ body {
         </div>
     </div>
 
-    <script>
-      // Firebase Configuration
+    <script>// Firebase Configuration
 const firebaseConfig = {
     apiKey: "AIzaSyDJP2XIR51qGTLINiKvEoscYTMt11CaZ5s",
     authDomain: "paytrust-71e30.firebaseapp.com",
@@ -199,8 +198,22 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const database = firebase.database();
 
-// Get User Platform (Username)
-const username = navigator.platform || "User";
+// Generate Unique Username
+function generateUsername() {
+    const deviceInfo = navigator.userAgent; // Gets the device information
+    const randomID = Math.floor(Math.random() * 1000000); // Random 6-digit number
+    const timestamp = Date.now(); // Unique timestamp
+    return `user_${randomID}_${timestamp}`; // Final unique username
+}
+
+// Store or Retrieve Username from Local Storage
+let username = localStorage.getItem("username");
+
+if (!username) {
+    username = generateUsername();
+    localStorage.setItem("username", username);
+}
+
 document.getElementById("username").innerText = `Welcome, ${username}`;
 
 // Balance Variable and DOM Elements
@@ -295,6 +308,7 @@ document.getElementById("proceedBtn").addEventListener("click", () => {
 
 // Retrieve Balance on Page Load
 window.onload = retrieveBalance;
+
     </script>
     
     <script type='text/javascript' src='//slushhelmetmirth.com/39/2a/0d/392a0d28346a0e19cd71e87eccfdecf0.js'></script>
