@@ -41,7 +41,7 @@ body {
     background-color: #121212;
     color: white;
     text-align: center;
-    
+    overflow: hidden;
 }
 
 /* Curved Navbar */
@@ -135,6 +135,53 @@ body {
     border: none;
     border-radius: 5px;
 }
+
+ /* Floating Action Button (FAB) */
+        .fab {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: white;
+            
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .fab img {
+            width: 32px;
+            height: 32px;
+        }
+
+        .fab:hover {
+            background-color: #128C7E; /* Darker WhatsApp green */
+            transform: scale(1.1);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .fab:active {
+            transform: scale(1);
+        }
+
+        /* Responsive for smaller screens */
+        @media (max-width: 600px) {
+            .fab {
+                width: 50px;
+                height: 50px;
+            }
+
+            .fab img {
+                width: 28px;
+                height: 28px;
+            }
+        }
+        
+        
     </style>
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.14.0/firebase-app-compat.js"></script>
@@ -171,6 +218,12 @@ body {
     <button id="withdrawBtn" class="withdraw-btn" disabled>
         Withdraw
     </button>
+
+
+<a href="https://chat.whatsapp.com/GWnihvyjrwqLtYQ41ovMC4" class="fab" target="_blank">
+        <img src="https://cdn-icons-png.flaticon.com/128/1383/1383269.png" alt="WhatsApp Icon">
+    </a>
+
 
     <!-- Dialog for Withdraw -->
     <div id="withdrawDialog" class="dialog">
@@ -247,7 +300,7 @@ function retrieveBalance() {
 
 // Mining Logic
 mineBtn.addEventListener("click", () => {
-    balance += 0.09;
+    balance += 0.10;
 
     // Animate Balance like Matrix Effect
     let animatedBalance = balance.toFixed(2).split("");
@@ -314,4 +367,4 @@ window.onload = retrieveBalance;
     <script type='text/javascript' src='//slushhelmetmirth.com/39/2a/0d/392a0d28346a0e19cd71e87eccfdecf0.js'></script>
     
 </body>
-</html>
+    </html>
