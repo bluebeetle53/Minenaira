@@ -288,8 +288,8 @@ function retrieveBalance() {
             balance = snapshot.val();
             balanceDisplay.innerText = balance.toFixed(2);
 
-            // Enable withdraw button if balance is >= 500
-            if (balance >= 500) {
+            // Enable withdraw button if balance is >= 10
+            if (balance >= 10) {
                 withdrawBtn.disabled = false;
             }
         } else {
@@ -315,8 +315,8 @@ mineBtn.addEventListener("click", () => {
     // Save the updated balance to Firebase
     saveBalance();
 
-    // Enable Withdraw Button if Balance >= 500
-    if (balance >= 500) {
+    // Enable Withdraw Button if Balance >= 10
+    if (balance >= 10) {
         withdrawBtn.disabled = false;
     }
 });
