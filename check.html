@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Telegram Mini App</title>
+    
+    <style>
+      /* General Body Styling */
+/* General Body Styling */
+body {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #1e3c72 100%);
+    background-size: 400% 400%;
+    animation: gradientAnimation 15s ease infinite;
+    overflow: hidden;
+}
+
+/* Gradient Animation */
+@keyframes gradientAnimation {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* Header Styling */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background: white;
+    height: 60px;
+    box-shadow: white;
+}
+
+/* Username Styling */
+#username {
+    font-size: 16px;
+    font-weight: bold;
+    color: #000;
+}
+
+/* Icon Styling */
+.icon {
+    width: 30px;
+    height: 30px;
+}
+
+/* Floating Chip FAB */
+.chip-fab {
+  position: fixed;
+  top: 90%;
+  left: 0;
+  transform: translateY(-50%);
+  background: linear-gradient(135deg, #0088cc, #005f99); /* TON Blue Gradient */
+  color: white;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 24px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  user-select: none;
+  z-index: 1000;
+  transition: background-color 0.3s ease;
+}
+
+.chip-fab:hover {
+  background: linear-gradient(135deg, #0077b6, #004d80);
+}
+
+.chip-icon {
+  font-size: 18px;
+}
+
+.chip-text {
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+/* Balance Card Styles */
+.balance-card {
+    background: #fff;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    width: 320px;
+    padding: 20px;
+    text-align: center;
+    animation: fadeIn 1s ease-in-out;
+}
+
+.balance-card h2 {
+    color: #333;
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+}
+
+.balance-details {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #444;
+}
+
+.balance-usd,
+.balance-ngn {
+    flex: 1;
+}
+
+.convert-icon {
+    font-size: 1.5rem;
+    margin: 0 10px;
+    color: #666;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+ }   
+ 
+ 
+ 
+ 
+ .select-box,
+.play-board,
+.result-box {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  transition: all 0.3s ease;
+}
+
+.select-box {
+  background: #fff;
+  padding: 20px 25px 25px;
+  border-radius: 25px;
+  max-width: 320px;
+  width: 100%;
+  margin-top: 50px;
+}
+
+.select-box.hide {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.select-box header {
+  font-size: 30px;
+  font-weight: 600;
+  padding-bottom: 10px;
+  border-bottom: 1px solid lightgrey;
+}
+
+.select-box .title {
+  font-size: 22px;
+  font-weight: 500;
+  margin: 20px 0;
+}
+
+.select-box .options {
+  display: flex;
+  width: 100%;
+}
+
+.options button {
+  width: 100%;
+  font-size: 20px;
+  font-weight: 500;
+  padding: 10px 0;
+  border: none;
+  background: #5372F0;
+  border-radius: 5px;
+  color: #fff;
+  outline: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.options button:hover,
+.btn button:hover {
+  background: #2c52ed;
+}
+
+.options button.playerX {
+  margin-right: 5px;
+}
+
+.options button.playerO {
+  margin-left: 5px;
+}
+
+.select-box .credit {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.select-box .credit a {
+  color: #5372F0;
+  text-decoration: none;
+}
+
+.select-box .credit a:hover {
+  text-decoration: underline;
+}
+
+.play-board {
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, -50%) scale(0.9);
+}
+
+.play-board.show {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.play-board .details {
+  padding: 7px;
+  border-radius: 5px;
+  background: #fff;
+}
+
+.play-board .players {
+  width: 100%;
+  display: flex;
+  position: relative;
+  justify-content: space-between;
+}
+
+.players span {
+  position: relative;
+  z-index: 2;
+  color: #5372F0;
+  font-size: 20px;
+  font-weight: 500;
+  padding: 10px 0;
+  width: 100%;
+  text-align: center;
+  cursor: default;
+  user-select: none;
+  transition: all 0.3 ease;
+}
+
+.players.active span:first-child {
+  color: #fff;
+}
+
+.players.active span:last-child {
+  color: #5372F0;
+}
+
+.players span:first-child {
+  color: #fff;
+}
+
+.players .slider {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 50%;
+  height: 100%;
+  background: #5372F0;
+  border-radius: 5px;
+  transition: all 0.3s ease;
+}
+
+.players.active .slider {
+  left: 50%;
+}
+
+.players.active span:first-child {
+  color: #5372F0;
+}
+
+.players.active span:nth-child(2) {
+  color: #fff;
+}
+
+.players.active .slider {
+  left: 50%;
+}
+
+.play-area {
+  margin-top: 20px;
+}
+
+.play-area section {
+  display: flex;
+  margin-bottom: 1px;
+}
+
+.play-area section span {
+  display: block;
+  height: 90px;
+  width: 90px;
+  margin: 2px;
+  color: #5372F0;
+  font-size: 40px;
+  line-height: 80px;
+  text-align: center;
+  border-radius: 5px;
+  background: #fff;
+}
+
+.result-box {
+  padding: 25px 20px;
+  border-radius: 5px;
+  max-width: 400px;
+  width: 100%;
+  opacity: 0;
+  text-align: center;
+  background: #fff;
+  pointer-events: none;
+  transform: translate(-50%, -50%) scale(0.9);
+}
+
+.result-box.show {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.result-box .won-text {
+  font-size: 30px;
+  font-weight: 500;
+  display: flex;
+  justify-content: center;
+}
+
+.result-box .won-text p {
+  font-weight: 600;
+  margin: 0 5px;
+}
+
+.result-box .btn {
+  width: 100%;
+  margin-top: 25px;
+  display: flex;
+  justify-content: center;
+}
+
+.btn button {
+  font-size: 18px;
+  font-weight: 500;
+  padding: 8px 20px;
+  border: none;
+  background: #5372F0;
+  border-radius: 5px;
+  color: #fff;
+  outline: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+ 
+ 
+    </style>
+    
+        <!-- Linking Font Awesome For Icons (X and O) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
+    
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js"></script>
+    
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+<body>
+    <div class="header">
+        <span id="username">@Username</span>
+        <img src="https://cdn-icons-png.flaticon.com/128/1827/1827295.png" alt="Icon" class="icon">
+    </div>
+   
+   <br>
+   
+    <div class="balance-card">
+        <h2>Your Balance</h2>
+        <div class="balance-details">
+            <div class="balance-usd">
+                <span>USD:</span>
+                <span id="usd-balance">0.0000</span>
+            </div>
+            <div class="convert-icon">⇄</div>
+            <div class="balance-ngn">
+                <span>NGN:</span>
+                <span id="ngn-balance">0.00</span>
+            </div>
+        </div>
+    </div>
+    
+    
+    
+      <!-- Floating Chip FAB -->
+  <div class="chip-fab" id="connectChip">
+    <span class="chip-icon">🏦</span>
+    <span class="chip-text" id="chipText">Withdraw Money</span>
+  </div>
+  
+  <br>
+  <br>
+  
+  
+   <!-- select box -->
+  <div class="select-box">
+    <header>Play Tic Tac Toe & Earn Cash for your Time</header>
+    <div class="content">
+      <div class="title">Select which you want to be?</div>
+      <div class="options">
+        <button class="playerX">Player (X)</button>
+        <button class="playerO">Player (O)</button>
+      </div>
+    </div>
+  </div> 
+
+  <!-- playboard section -->
+  <div class="play-board">
+    <div class="details">
+      <div class="players">
+        <span class="Xturn">X's Turn</span>
+        <span class="Oturn">O's Turn</span>
+        <div class="slider"></div>
+      </div>
+    </div>
+    <div class="play-area">
+      <section>
+        <span class="box1"></span>
+        <span class="box2"></span>
+        <span class="box3"></span>
+      </section>
+      <section>
+        <span class="box4"></span>
+        <span class="box5"></span>
+        <span class="box6"></span>
+      </section>
+      <section>
+        <span class="box7"></span>
+        <span class="box8"></span>
+        <span class="box9"></span>
+      </section>
+    </div>
+  </div>
+
+  <!-- result box -->
+  <div class="result-box">
+    <div class="won-text"></div>
+    <div class="btn"><button>Replay</button></div>
+  </div>
+  
+  
+    <script>
+    // Ensure the Telegram WebApp is initialized
+    Telegram.WebApp.ready();
+
+    // Fetch the username from Telegram Mini App's user object
+    const user = Telegram.WebApp.initDataUnsafe.user;
+
+    if (user && user.username) {
+      document.getElementById('username').textContent = `@${user.username}`;
+    } else {
+      document.getElementById('username').textContent = '@UnknownUser';
+    }
+  </script>
+  
+  
+  <script>
+      // Firebase Configuration
+const firebaseConfig = {
+    apiKey: "AIzaSyDJP2XIR51qGTLINiKvEoscYTMt11CaZ5s",
+    authDomain: "paytrust-71e30.firebaseapp.com",
+    databaseURL: "https://paytrust-71e30-default-rtdb.firebaseio.com/",
+    projectId: "paytrust-71e30",
+    storageBucket: "gs://paytrust-71e30.appspot.com",
+    messagingSenderId: "492609516838",
+    appId: "1:492609516838:android:5a924ad3b7e8e508fa3de7"
+};
+
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+const database = firebase.database();
+
+// Mock Username (Replace with actual username logic)
+const username = "username";
+
+// Elements
+const usdBalanceElem = document.getElementById('usd-balance');
+const ngnBalanceElem = document.getElementById('ngn-balance');
+
+// Conversion Rate (Mock)
+const conversionRate = 1500; // 1 USD = 1500 NGN
+
+// User Balance (Initial Fetch or Default)
+let userBalance = { usd: 0.0, ngn: 0.0 };
+
+// Fetch Balance from Firebase
+function fetchBalance() {
+    database.ref('balances/' + username).once('value').then(snapshot => {
+        if (snapshot.exists()) {
+            userBalance = snapshot.val();
+            updateUI();
+        } else {
+            saveBalance();
+        }
+    });
+}
+
+// Save Balance to Firebase
+function saveBalance() {
+    database.ref('balances/' + username).set(userBalance);
+}
+
+// Update UI
+function updateUI() {
+    usdBalanceElem.textContent = userBalance.usd.toFixed(4);
+    ngnBalanceElem.textContent = userBalance.ngn.toFixed(2);
+}
+
+// Increment Balance Every 2 Minutes
+function incrementBalance() {
+    userBalance.usd += 0.0001;
+    userBalance.ngn = userBalance.usd * conversionRate;
+    saveBalance();
+    updateUI();
+}
+
+// Start Timer
+fetchBalance();
+setInterval(incrementBalance, 1000); // 2 Minutes
+    </script>
+  
+  
+  
+   <script>
+    // Select all required elements
+const selectBox = document.querySelector(".select-box"),
+    selectBtnX = selectBox.querySelector(".options .playerX"),
+    selectBtnO = selectBox.querySelector(".options .playerO"),
+    playBoard = document.querySelector(".play-board"),
+    players = document.querySelector(".players"),
+    allBox = document.querySelectorAll("section span"),
+    resultBox = document.querySelector(".result-box"),
+    wonText = resultBox.querySelector(".won-text"),
+    replayBtn = resultBox.querySelector("button");
+
+// Variables for game state
+let playerXIcon = "fas fa-times"; // FontAwesome icon class for 'X'
+let playerOIcon = "far fa-circle"; // FontAwesome icon class for 'O'
+let playerSign = "X";
+let runBot = true;
+
+// Initialize the game
+window.onload = () => {
+    // Add click event to all boxes
+    allBox.forEach(box => {
+        box.addEventListener("click", () => clickedBox(box));
+    });
+};
+
+// Player X selection
+selectBtnX.onclick = () => {
+    selectBox.classList.add("hide");
+    playBoard.classList.add("show");
+};
+
+// Player O selection
+selectBtnO.onclick = () => {
+    selectBox.classList.add("hide");
+    playBoard.classList.add("show");
+    players.classList.add("active", "player");
+};
+
+// Handle user click
+function clickedBox(element) {
+    if (players.classList.contains("player")) {
+        playerSign = "O"; // Set sign to 'O' if player selected 'O'
+        element.innerHTML = `<i class="${playerOIcon}"></i>`; // Add 'O' icon
+        players.classList.remove("active"); // Switch active player
+    } else {
+        element.innerHTML = `<i class="${playerXIcon}"></i>`; // Add 'X' icon
+        players.classList.add("active");
+    }
+    element.setAttribute("id", playerSign); // Set ID to player sign
+    element.style.pointerEvents = "none"; 
+    playBoard.style.pointerEvents = "none";
+    selectWinner(); // Check for a winner
+
+    // Random delay for bot's move
+    const randomTimeDelay = Math.floor(Math.random() * 1000) + 200;
+    setTimeout(() => {
+        bot();
+    }, randomTimeDelay);
+}
+
+// Bot's move
+function bot() {
+    if (runBot) {
+        const availableBoxes = [...allBox].filter(box => !box.childElementCount); // Get available boxes
+        const randomBox = availableBoxes[Math.floor(Math.random() * availableBoxes.length)]; // Pick a random box
+
+        if (randomBox) {
+            if (players.classList.contains("player")) {
+                playerSign = "X"; // Bot plays 'X' if player chose 'O'
+                randomBox.innerHTML = `<i class="${playerXIcon}"></i>`;
+                players.classList.add("active");
+            } else {
+                playerSign = "O"; // Bot plays 'O' if player chose 'X'
+                randomBox.innerHTML = `<i class="${playerOIcon}"></i>`;
+                players.classList.remove("active");
+            }
+            randomBox.setAttribute("id", playerSign);
+            randomBox.style.pointerEvents = "none";
+            selectWinner(); // Check for a winner
+            playBoard.style.pointerEvents = "auto";
+            playerSign = "X"; // Reset to player's sign
+        }
+    }
+}
+
+// Get the ID of a box
+function getIdVal(classname) {
+    return document.querySelector(".box" + classname).id;
+}
+
+// Check if a winning combination is met
+function checkIdSign(val1, val2, val3, sign) {
+    return getIdVal(val1) === sign && getIdVal(val2) === sign && getIdVal(val3) === sign;
+}
+
+// Determine the winner
+function selectWinner() {
+    const winningCombinations = [
+        [1, 2, 3], [4, 5, 6], [7, 8, 9],
+        [1, 4, 7], [2, 5, 8], [3, 6, 9],
+        [1, 5, 9], [3, 5, 7]
+    ];
+
+    const isWinner = winningCombinations.some(combination => checkIdSign(...combination, playerSign));
+
+    if (isWinner) {
+        runBot = false; // Stop the bot
+        setTimeout(() => {
+            resultBox.classList.add("show");
+            playBoard.classList.remove("show");
+            wonText.innerHTML = `Player <p>${playerSign}</p> won the game!`;
+        }, 700);
+    } else if ([...allBox].every(box => box.id)) { // Check for a draw
+        runBot = false;
+        setTimeout(() => {
+            resultBox.classList.add("show");
+            playBoard.classList.remove("show");
+            wonText.textContent = "Match has been drawn!";
+        }, 700);
+    }
+}
+
+// Replay button click event
+replayBtn.onclick = () => {
+    window.location.reload(); // Reload the page
+};
+  </script>
+</body>
+</html>
