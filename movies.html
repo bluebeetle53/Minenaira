@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Streaming Platform</title>
+    <style>
+      /* General Styles */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #FF9800;
+    color: #fff;
+}
+
+header {
+    text-align: center;
+    padding: 20px;
+    background: #FF9800;
+    border-bottom: 2px solid #444;
+}
+
+h1 {
+    margin: 0;
+}
+
+.search-bar {
+    margin: 20px 0;
+}
+
+.search-bar input {
+    padding: 10px;
+    width: 300px;
+    border-radius: 5px;
+    border: none;
+}
+
+.search-bar button {
+    padding: 10px 15px;
+    margin-left: 5px;
+    background: #e50914;
+    border: none;
+    color: #fff;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* Movie Grid */
+.movie-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    padding: 20px;
+}
+
+.movie-card {
+    background: #222;
+    border-radius: 5px;
+    overflow: hidden;
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.movie-card:hover {
+    transform: scale(1.05);
+}
+
+.movie-card img {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+}
+
+.movie-card h3 {
+    margin: 10px 0;
+}
+
+/* Movie Details */
+.movie-details {
+    margin: 20px;
+    text-align: center;
+}
+
+.movie-details img {
+    width: 200px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+/* Video Player */
+.video-player-container {
+    margin: 20px auto;
+    max-width: 800px;
+    text-align: center;
+}
+
+.video-player-container video {
+    width: 100%;
+    height: 450px;
+    border-radius: 10px;
+    margin-top: 10px;
+}
+
+.download-button {
+    display: inline-block;
+    margin: 10px;
+    padding: 10px 15px;
+    background: #28a745;
+    color: #fff;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+
+/* Dialog Styles */
+    .dialog-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+
+    .dialog-box {
+      background: url('https://img.freepik.com/free-vector/abstract-halftone-background_23-2148595343.jpg?ga=GA1.1.83073729.1722412951&semt=ais_hybrid') no-repeat center center;
+      border-radius: 8px;
+      padding: 20px;
+      text-align: center;
+      max-width: 300px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .dialog-icon {
+      width: 150px;
+      height: 150px;
+      margin-bottom: 1px;
+    }
+
+    .dialog-text {
+      margin-bottom: 15px;
+      font-size: 16px;
+      color: white;
+    }
+
+    .dialog-button {
+      background: #4caf50;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .dialog-button:hover {
+      background: #388e3c;
+    }
+
+/* Close Button ❌ */
+    .dialog-close {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background: transparent;
+      border: none;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      color: #888;
+    }
+
+    .dialog-close:hover {
+      color: #333;
+    }
+
+    .hidden {
+      display: none;
+    }
+    
+    
+    </style>
+    
+    <script type='text/javascript' src='//slushhelmetmirth.com/d9/80/e5/d980e590b722c4683cfae79509f8e82e.js'></script>
+    
+    
+</head>
+<body>
+  
+  <script type='text/javascript' src='//slushhelmetmirth.com/5f/8a/71/5f8a710eaae708ddedca22a14f227181.js'></script>
+  
+  
+    <!-- Header Section -->
+    <header>
+        <h1>Melvica Movies</h1>
+        <img src="https://cdn-icons-png.flaticon.com/128/11168/11168169.png">
+        <div class="search-bar">
+            <input type="text" id="searchInput" placeholder="Search for a movie...">
+            <button onclick="searchMovie()">Search</button>
+        </div>
+    </header>
+
+    <!-- Main Section -->
+    <main>
+        <h2>Trending Movies</h2>
+        <div id="movieGrid" class="movie-grid"></div>
+        
+        <div id="movieDetails" class="movie-details"></div>
+        <div id="videoPlayerContainer" class="video-player-container"></div>
+    </main>
+
+    <!-- Footer Section -->
+    <footer>
+        <p>&copy; 2024 Movie Streaming Platform. All rights reserved.</p>
+    </footer>
+
+    <script>
+      const API_KEY = 'VqNbYlG5VTRZuEGRhvkuwiErkZEb9BldAlD5X85G';
+const BASE_URL = 'https://api.watchmode.com/v1';
+
+/* Fetch Trending Movies */
+async function fetchTrendingMovies() {
+    try {
+        const response = await fetch(`${BASE_URL}/list-titles/?apiKey=${API_KEY}&sort_by=popularity_desc`);
+        const data = await response.json();
+        displayMovies(data.titles);
+    } catch (error) {
+        console.error('Error fetching trending movies:', error);
+    }
+}
+
+/* Display Movies */
+function displayMovies(movies) {
+    const movieGrid = document.getElementById('movieGrid');
+    movieGrid.innerHTML = '';
+    movies.forEach(movie => {
+        const movieCard = document.createElement('div');
+        movieCard.classList.add('movie-card');
+        movieCard.innerHTML = `
+            <img src="${movie.poster || 'https://via.placeholder.com/200'}" alt="${movie.title}">
+            <h3>${movie.title}</h3>
+        `;
+        movieCard.onclick = () => fetchMovieDetails(movie.id);
+        movieGrid.appendChild(movieCard);
+    });
+}
+
+/* Search Movie */
+async function searchMovie() {
+    const query = document.getElementById('searchInput').value;
+    if (!query) return alert('Please enter a movie name!');
+
+    try {
+        const response = await fetch(`${BASE_URL}/autocomplete/?apiKey=${API_KEY}&search_value=${query}`);
+        const data = await response.json();
+        const movieId = data.results[0]?.id;
+        if (movieId) {
+            fetchMovieDetails(movieId);
+        } else {
+            alert('No results found');
+        }
+    } catch (error) {
+        console.error('Error searching movie:', error);
+    }
+}
+
+/* Fetch Movie Details */
+async function fetchMovieDetails(movieId) {
+    try {
+        const response = await fetch(`${BASE_URL}/title/${movieId}/details/?apiKey=${API_KEY}`);
+        const movie = await response.json();
+        displayMovieDetails(movie);
+    } catch (error) {
+        console.error('Error fetching movie details:', error);
+    }
+}
+
+/* Display Movie Details */
+async function displayMovieDetails(movie) {
+    const movieDetails = document.getElementById('movieDetails');
+    const videoPlayerContainer = document.getElementById('videoPlayerContainer');
+
+    movieDetails.innerHTML = `
+        <h2>${movie.title}</h2>
+        <img src="${movie.poster || 'https://via.placeholder.com/200'}" alt="${movie.title}">
+        <p><strong>Release Date:</strong> ${movie.release_date || 'N/A'}</p>
+        <p><strong>Genre:</strong> ${movie.genre_names?.join(', ') || 'N/A'}</p>
+        <p><strong>Overview:</strong> ${movie.plot_overview || 'No overview available'}</p>
+    `;
+
+    // Fetch Streaming and Download Links
+    const sourcesResponse = await fetch(`${BASE_URL}/title/${movie.id}/sources/?apiKey=${API_KEY}`);
+    const sourcesData = await sourcesResponse.json();
+
+    const streamingSource = sourcesData?.sources?.find(src => src.type === 'free');
+    const downloadSource = sourcesData?.sources?.find(src => src.type === 'download');
+
+    if (streamingSource) {
+        videoPlayerContainer.innerHTML = `
+            <h3>Watch Movie</h3>
+            <video controls>
+                <source src="${streamingSource.web_url}" type="video/mp4">
+                Your browser does not support video playback.
+            </video>
+        `;
+    }
+
+    if (downloadSource) {
+        videoPlayerContainer.innerHTML += `
+            <a href="${downloadSource.web_url}" class="download-button" target="_blank">Download Movie</a>
+        `;
+    }
+}
+
+/* Initialize Trending Movies */
+fetchTrendingMovies();
+    </script>
+    
+    
+    
+    <!-- Dialog Box -->
+  <div id="dialog" class="dialog-overlay hidden">
+    <div class="dialog-box">
+            <button class="dialog-close" onclick="closeDialog()">❌</button>
+      <img src="https://lander.2betterlives.net/sw-pop-ng-bbr/files/img/money.png" 
+           alt="Rewards Icon" 
+           class="dialog-icon"
+           onerror="this.src='https://via.placeholder.com/60';">
+      <div class="dialog-text"> You've received ₦0.00001 from Melvica</div>
+      <a href="https://whomeenoaglauns.com/4/8684313">
+      <button class="dialog-button" onclick="closeDialog()">Claim</button>
+      </a>
+    </div>
+  </div>
+    
+    
+    
+    <script>
+    // Function to show the dialog
+    function showDialog() {
+      document.getElementById('dialog').classList.remove('hidden');
+    }
+
+    // Function to close the dialog
+    function closeDialog() {
+      document.getElementById('dialog').classList.add('hidden');
+    }
+
+    // Show dialog every 4 seconds
+    setInterval(showDialog, 4000);
+  </script>
+  
+  
+</body>
+</html>
