@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Melvica - Play Games</title>
+    <style>
+      /* General Styles */
+body {
+    margin: 0;
+    font-family: 'Arial', sans-serif;
+    background: url('https://download.cocos.com/CocosPortal/image/7432c0a061fa4615beffb426abb31b3a/7432c0a061fa4615beffb426abb31b3a.png') no-repeat center center fixed;
+    background-size: cover;
+    color: #fff;
+}
+h1, h2, h3 {
+    margin: 0;
+}
+a {
+    text-decoration: none;
+}
+
+/* Hero Section */
+.hero {
+    height: 60vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('hero-bg.jpg') no-repeat center center;
+    background-size: cover;
+    color: white;
+}
+.hero-logo {
+    width: 120px;
+    margin-bottom: 20px;
+}
+.hero h1 {
+    font-size: 2.5em;
+    margin-bottom: 10px;
+}
+.hero p {
+    font-size: 1.2em;
+    margin-bottom: 20px;
+}
+.hero-btn {
+    background: #4f46e5;
+    color: white;
+    padding: 10px 25px;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: background 0.3s;
+}
+.hero-btn:hover {
+    background: #3a33c1;
+}
+
+/* Section Title */
+.section-title {
+    text-align: center;
+    margin: 40px 0 20px;
+    font-size: 2em;
+    color: #fff;
+}
+
+/* Game Section */
+main {
+    padding: 20px;
+    text-align: center;
+}
+.game-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
+.game-card {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    cursor: pointer;
+    transition: transform 0.3s;
+}
+.game-card:hover {
+    transform: translateY(-5px);
+}
+.game-card img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+}
+.game-card h3 {
+    margin: 10px;
+    font-size: 1.2em;
+}
+.game-card p {
+    margin: 0 10px 10px;
+    font-size: 0.9em;
+    color: #ddd;
+}
+
+/* Bottom Sheet */
+.bottom-sheet {
+    position: fixed;
+    bottom: -100%;
+    left: 0;
+    width: 100%;
+    background: #fff;
+    color: #000;
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.2);
+    border-radius: 15px 15px 0 0;
+    transition: bottom 0.3s ease-in-out;
+    z-index: 1000;
+}
+.bottom-sheet-content {
+    padding: 20px;
+    text-align: center;
+}
+.bottom-sheet h2 {
+    margin-bottom: 10px;
+}
+.bottom-sheet p {
+    margin-bottom: 20px;
+    color: #666;
+}
+.bottom-sheet button {
+    margin: 5px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.bottom-sheet button:first-child {
+    background: #4f46e5;
+    color: white;
+}
+.bottom-sheet button:last-child {
+    background: #ddd;
+}
+
+
+/* Dialog Styles */
+    .dialog-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+
+    .dialog-box {
+      background: url('https://img.freepik.com/free-vector/abstract-halftone-background_23-2148595343.jpg?ga=GA1.1.83073729.1722412951&semt=ais_hybrid') no-repeat center center;
+      border-radius: 8px;
+      padding: 20px;
+      text-align: center;
+      max-width: 300px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .dialog-icon {
+      width: 150px;
+      height: 150px;
+      margin-bottom: 1px;
+    }
+
+    .dialog-text {
+      margin-bottom: 15px;
+      font-size: 16px;
+      color: white;
+    }
+
+    .dialog-button {
+      background: #4caf50;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .dialog-button:hover {
+      background: #388e3c;
+    }
+
+/* Close Button ❌ */
+    .dialog-close {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background: transparent;
+      border: none;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      color: #888;
+    }
+
+    .dialog-close:hover {
+      color: #333;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: 10px 0;
+    background: rgba(0, 0, 0, 0.7);
+    margin-top: 40px;
+}
+footer p {
+    margin: 0;
+    font-size: 0.9em;
+}
+    </style>
+    
+    <script type='text/javascript' src='//slushhelmetmirth.com/a6/aa/f0/a6aaf0870de26307bc3abe2c99b32a5d.js'></script>
+    
+</head>
+<body>
+  
+  <script type='text/javascript' src='//slushhelmetmirth.com/39/2a/0d/392a0d28346a0e19cd71e87eccfdecf0.js'></script>
+  
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <img src="https://codehubme.wordpress.com/wp-content/uploads/2024/12/20241224_050326-removebg-preview6703661905162062910.png" alt="Melvica Logo" class="hero-logo">
+            <h1>Welcome to Melvica</h1>
+            <p>Explore, Play, and Enjoy the Best Games Online</p>
+            <a href="#games" class="hero-btn">Explore Games</a>
+        </div>
+    </section>
+
+    <!-- Game Section -->
+    <main id="games">
+        <h2 class="section-title">Popular Games</h2>
+        <div class="game-container">
+          
+          
+          <div class="game-card" onclick="openBottomSheet('Call of Duty', 'Call of Duty is a military first-person shooter video game series and media franchise published by Activision, starting in 2003.', 'https://play.google.com/store/apps/details?id=com.activision.callofduty.shooter')">
+                <img src="https://wallpapers.com/images/featured/call-of-duty-pictures-7lrqnchbx478ucgg.jpg" alt="Game 2">
+                <h3>Call of Duty</h3>
+                <h5> Suggested by Melvica</h5>
+                <p>Call of Duty is a military first-person shooter video game series and media franchise published by Activision, starting in 2003.</p>
+            </div>
+          
+          
+          
+            <div class="game-card" onclick="openBottomSheet('Subway Surf', 'Better run that run with the baddest new character, Demi Lovato', 'https://poki.com/en/g/subway-surfers?fullscreen=true')">
+                <img src="https://subwaysurfersgame.io/upload/cache/upload/imgs/game/subway-surfers-st-petersburg-cover-c270x200.png" alt="Game 1">
+                <h3>Subway Surf</h3>
+                <p>Better run that run with the baddest new character, Demi Lovato</p>
+            </div>
+            
+            
+            <div class="game-card" onclick="openBottomSheet('Who is lying', 'A brand new puzzle and riddle game comes from the makers of fun-favorite', 'https://poki.com/en/g/who-is?fullscreen=true')">
+                <img src="https://imgs.crazygames.com/braindom-2-who-is-lying_16x9/20241115022200/braindom-2-who-is-lying_16x9-cover?auto=format%2Ccompress&q=40&cs=strip&w=216&h=120&fit=crop&dpr=2" alt="Game 2">
+                <h3>Who is lying</h3>
+                <p>A brand new puzzle and riddle game comes from the makers of fun-favorite!</p>
+            </div>
+            
+            
+            <div class="game-card" onclick="openBottomSheet('Water color Sort', 'Water Color Sort is a puzzle game in which your objective is to sort liquids by color by mixing them properly', 'https://poki.com/en/g/water-color-sort?fullscreen=true')">
+                <img src="https://img.poki-cdn.com/cdn-cgi/image/quality=78,width=314,height=314,fit=cover,f=auto/bea9b33040f3776e709fbe8c6e23c623.png" alt="Game 2">
+                <h3>Water Color Sort</h3>
+                <p>Water Color Sort is a puzzle game in which your objective is to sort liquids by color by mixing them properly</p>
+            </div>
+            
+            
+            <div class="game-card" onclick="openBottomSheet('Fury Warship', 'Fury Warship is an intense naval combat game where you command legendary battleships to dominate the seas', 'https://poki.com/en/g/fury-warship?fullscreen=true')">
+                <img src="https://cdn6.aptoide.com/imgs/6/6/9/6697c767fcc91ba4329dd6e292287fbe_screen.jpg?w=244" alt="Game 2">
+                <h3>FURY WARSHIP</h3>
+                <p>Fury Warship is an intense naval combat game where you command legendary battleships to dominate the seas</p>
+            </div>
+            
+            
+            <div class="game-card" onclick="openBottomSheet('karate-fighter', 'Unleash your inner martial arts master with Karate Fighter, the ultimate 3D fighting game that packs thrilling action into every match.', 'https://poki.com/en/g/karate-fighter?fullscreen=true')">
+                <img src="https://img.freepik.com/premium-photo/female-karate-fighter-training-with-master-white-kimono-karateka-workout-martial-arts-fighting-competition_266732-21085.jpg?w=740" alt="Game 2">
+                <h3>Karate Fighter</h3>
+                <p>Unleash your inner martial arts master with Karate Fighter, the ultimate 3D fighting game that packs thrilling action into every match.</p>
+            </div>
+            
+            <div class="game-card" onclick="openBottomSheet('Blocky Blast Puzzle', 'How to play Blocky Blast Puzzle? Click and drag blocks to move them freely around the grid. Master the use of Block Blasts', 'https://poki.com/en/g/blocky-blast-puzzle?fullscreen=true')">
+                <img src="https://block-blast.io/data/image/posts/block-blast-banner.jpg" alt="Game 2">
+                <h3>Blocky Blast Puzzle</h3>
+                <p>How to play Blocky Blast Puzzle? Click and drag blocks to move them freely around the grid. Master the use of "Block Blasts"</p>
+            </div>
+            
+            
+            <div class="game-card" onclick="openBottomSheet('Panda bubble Shooter', 'The aim of Bubble Shooter is to collect as many points as possible by popping as many balloons as possible', 'https://poki.com/en/g/panda-bubble-shooter?fullscreen=true')">
+                <img src="https://images.sftcdn.net/images/t_app-icon-m/p/b34da029-be79-40cc-aaea-3c6da78d3d6b/1952883917/bubble-shooter-2-hmi-logo" alt="Game 2">
+                <h3> Panda bubble shooter</h3>
+                <p>The aim of Bubble Shooter is to collect as many points as possible by popping as many balloons as possible</p>
+            </div>
+            
+            
+            <div class="game-card" onclick="openBottomSheet('Penalty Shooters 2', 'Penalty Shooters 2 is a soccer game where you score goals to win the soccer tournament!', 'https://poki.com/en/g/penalty-shooters-2?fullscreen=true')">
+                
+                <img src="https://imgs.crazygames.com/penalty-shooters-2_16x9/20240726040713/penalty-shooters-2_16x9-cover?auto=format%2Ccompress&q=40&cs=strip&w=216&h=120&fit=crop&dpr=2" alt="Game 2">
+                <h3>Penalty Shooters 2</h3>
+                <p>Penalty Shooters 2 is a soccer game where you score goals to win the soccer tournament!</p>
+            </div>
+            
+            
+            <div class="game-card" onclick="openBottomSheet('Crazy Cars', 'Crazy Cars is a 3D car game that takes place in a vibrant location full of interesting tracks, entertaining obstacles, and rewarding challenges.', 'https://poki.com/en/g/crazy-cars?fullscreen=true')">
+                <img src="https://cdn-1.webcatalog.io/catalog/poki-crazy-cars/poki-crazy-cars-icon-filled-256.webp?v=1714778275521" alt="Game 2">
+                <h3>Crazy Cars</h3>
+                <p>Crazy Cars is a 3D car game that takes place in a vibrant location full of interesting tracks, entertaining obstacles, and rewarding challenges.</p>
+            </div>
+            
+            
+            <div class="game-card" onclick="openBottomSheet('Bullet Bros', 'Bullet Bros is the thrilling sequel to the funny platform game Flip Bros. This time, you're armed with a powerful gun that adds a whole new dimension to the ', 'https://poki.com/en/g/bullet-bros?fullscreen=true')">
+                <img src="https://kbhgames.com/wp-content/uploads/2024/08/Bullet-Bros.jpg" alt="Bullet bros">
+                <h3>Bullet Bros</h3>
+                <p>Bullet Bros is the thrilling sequel to the funny platform game Flip Bros. This time, you're armed with a powerful gun that adds a whole new dimension to the ...</p>
+            </div>
+            
+            
+            <div class="game-card" onclick="openBottomSheet('Cryzen.io', 'Cryzen.io is a multiplayer tactical shooter that brings the intensity of games like Counter-Strike, Valorant, and Call of Duty to the online gaming world.', 'https://Cryzen.io/play')">
+                <img src="https://a.silvergames.com/w/b/cryzen-io.webp" alt="Game 2">
+                <h3>Cryzen.io</h3>
+                <h5> Suggested by Melvica</h5>
+                <p>Cryzen.io is a multiplayer tactical shooter that brings the intensity of games like Counter-Strike, Valorant, and Call of Duty to the online gaming world.</p>
+            </div>
+            
+           
+
+    <!-- Bottom Sheet -->
+    <div class="bottom-sheet" id="bottomSheet">
+        <div class="bottom-sheet-content">
+            <h2 id="gameTitle"></h2>
+            <p id="gameDescription"></p>
+            <button id="playButton">Play Now</button>
+            <button onclick="closeBottomSheet()">Close</button>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Melvica. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+      function openBottomSheet(title, description, url) {
+    document.getElementById('gameTitle').innerText = title;
+    document.getElementById('gameDescription').innerText = description;
+    document.getElementById('playButton').onclick = () => window.open(url, '_blank');
+    
+    document.getElementById('bottomSheet').style.bottom = '0';
+}
+
+function closeBottomSheet() {
+    document.getElementById('bottomSheet').style.bottom = '-100%';
+}
+    </script>
+    
+    
+     <!-- Dialog Box -->
+  <div id="dialog" class="dialog-overlay hidden">
+    <div class="dialog-box">
+            <button class="dialog-close" onclick="closeDialog()">❌</button>
+      <img src="https://lander.2betterlives.net/sw-pop-ng-bbr/files/img/money.png" 
+           alt="Rewards Icon" 
+           class="dialog-icon"
+           onerror="this.src='https://via.placeholder.com/60';">
+      <div class="dialog-text"> You've received ₦0.00001 from Melvica</div>
+      <a href="https://whomeenoaglauns.com/4/8686315">
+      <button class="dialog-button" onclick="closeDialog()">Claim</button>
+      </a>
+    </div>
+  </div>
+  <script>
+    // Function to show the dialog
+    function showDialog() {
+      document.getElementById('dialog').classList.remove('hidden');
+    }
+
+    // Function to close the dialog
+    function closeDialog() {
+      document.getElementById('dialog').classList.add('hidden');
+    }
+
+    // Show dialog every 3 seconds
+    setInterval(showDialog, 3000);
+  </script>
+  
+</body>
+</html>
